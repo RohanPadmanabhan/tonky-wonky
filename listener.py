@@ -47,8 +47,8 @@ class TonkyWonky:
                     self.mouth.start_mouth()
             
                 if self.currentState == AlexaState.IDLE:
-                    time.sleep(2)
                     self.mouth.stop_mouth()
+                    time.sleep(1)
                     self.neck.lower_neck()
                     self.eyes.turn_off()
                     
