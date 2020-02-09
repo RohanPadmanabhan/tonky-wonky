@@ -4,7 +4,7 @@ import eyes
 import neck
 import mouth
 import RPi.GPIO as GPIO
-
+import time
 
 
 class AlexaState(Enum):
@@ -47,11 +47,14 @@ class TonkyWonky:
                     self.mouth.start_mouth()
             
                 if self.currentState == AlexaState.IDLE:
+                    time.sleep(2)
                     self.mouth.stop_mouth()
                     self.neck.lower_neck()
                     self.eyes.turn_off()
                     
-        except Exception or KeyboardInterrupt:
+        except Exception:
+            self.cleanup()
+        except KeyboardInterrupt:
             self.cleanup()
 
 
