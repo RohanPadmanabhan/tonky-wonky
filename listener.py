@@ -3,6 +3,9 @@ from enum import Enum
 import eyes
 import neck
 import mouth
+import RPi.GPIO as GPIO
+
+
 
 class AlexaState(Enum):
     #CONNECTING = 'Connecting...'
@@ -14,7 +17,7 @@ class AlexaState(Enum):
 
 class TonkyWonky:
     def __init__(self):
-        
+        GPIO.setmode(GPIO.BCM)
         self.eyes = eyes.Eyes()
         self.neck = neck.Neck()
         self.mouth = mouth.Mouth()
@@ -56,6 +59,7 @@ class TonkyWonky:
         self.eyes.shut_down()
         self.neck.shut_down()
         self.mouth.shut_down()
+        GPIO.cleanup()
 
 def main():
     TonkyWonky().run()

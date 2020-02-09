@@ -1,6 +1,10 @@
+import RPi.GPIO as GPIO
 from queue import Queue
 import threading
 import enum
+import time
+
+MOUTH_PIN = 27
 
 
 class MouthInstruction(enum.Enum):
@@ -35,15 +39,21 @@ class Mouth:
     
     
     def _setupPins(self):
-        pass
-    
+        GPIO.setup(MOUTH_PIN, GPIO.OUT)
+        self._servo = GPIO.PWM(MOUTH_PIN, 50)
+        self._servo.start(2.5)
+
     def _cleanupPins(self):
-        pass
+        self._servo.stop()
     
     def _move_mouth_once(self):
         ''' This function must block until the mouth has been opened and closed. '''
-        print('Doing one mouth movement')
-        pass
+        self._servo.ChangeDutyCycle(3)
+        time.sleep(self._servo.random() / 2)
+        self._servo.ChangeDutyCycle(7)
+        time.sleep(self._servo.random() / 2)
+        print('Done one mouth movement')
+        
     
     def _run_consumer(self):
         lastInstruction = MouthInstruction.STOP_TALKING
