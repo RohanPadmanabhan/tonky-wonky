@@ -1,7 +1,7 @@
 from queue import Queue
 import threading
 import enum
-
+import time
 
 class MouthInstruction(enum.Enum):
     START_TALKING = 1
@@ -10,7 +10,7 @@ class MouthInstruction(enum.Enum):
 
 class Mouth:
     def __init__(self):
-        print("Init neck")
+        print("Init mouth")
         self._instruction_queue = Queue()
         self._setupPins()
         
@@ -43,6 +43,7 @@ class Mouth:
     def _move_mouth_once(self):
         ''' This function must block until the mouth has been opened and closed. '''
         print('Doing one mouth movement')
+        time.sleep(1)
         pass
     
     def _run_consumer(self):
