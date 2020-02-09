@@ -3,6 +3,7 @@ from queue import Queue
 import threading
 import enum
 import time
+import random
 
 MOUTH_PIN = 27
 
@@ -14,7 +15,7 @@ class MouthInstruction(enum.Enum):
 
 class Mouth:
     def __init__(self):
-        print("Init neck")
+        print("Init mouth")
         self._instruction_queue = Queue()
         self._setupPins()
         
@@ -49,9 +50,9 @@ class Mouth:
     def _move_mouth_once(self):
         ''' This function must block until the mouth has been opened and closed. '''
         self._servo.ChangeDutyCycle(3)
-        time.sleep(self._servo.random() / 2)
+        time.sleep(random.random() / 2)
         self._servo.ChangeDutyCycle(7)
-        time.sleep(self._servo.random() / 2)
+        time.sleep(random.random() / 2)
         print('Done one mouth movement')
         
     
