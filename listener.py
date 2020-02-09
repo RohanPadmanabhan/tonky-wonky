@@ -1,6 +1,8 @@
 import sys
 from enum import Enum
-
+import eyes
+import neck
+import mouth
 
 class AlexaState(Enum):
     #CONNECTING = 'Connecting...'
@@ -9,53 +11,54 @@ class AlexaState(Enum):
     THINKING = 'Thinking...'
     SPEAKING = 'Speaking...'
 
+
+class TonkyWonky:
+    def __init__(self):
         
-def parseStatus(line):
-    for state in AlexaState:
-        if state.value in line:
-            return state
+        self.eyes = eyes.Eyes()
+        self.neck = neck.Neck()
+        self.mouth = mouth.Mouth()
+        self.currentState = AlexaState.IDLE
 
-def raiseHead():
-    print("Raising head")
-    
-def lowerHead():
-    print("Lower head")
+       
+    def _parse_status(self, line):
+        for state in AlexaState:
+            if state.value in line:
+                return state
 
-def turnLedsOn():
-    print("Turn LEDs on")
+    def run(self):
+        try:
+            for line in sys.stdin:
+            
+                newState = self._parse_status(line)
+            
+                if newState is None or newState == self.currentState:
+                    continue
+                self.currentState = newState
+            
+                if self.currentState == AlexaState.LISTENING:
+                    self.eyes.turn_on()
+                    self.neck.raise_neck()
+            
+                if self.currentState == AlexaState.SPEAKING:
+                    self.mouth.start_mouth()
+            
+                if self.currentState == AlexaState.IDLE:
+                    self.mouth.stop_mouth()
+                    self.neck.lower_neck()
+                    self.eyes.turn_off()
+                    
+        except Exception or KeyboardInterrupt:
+            self.cleanup()
 
-def turnLedsOff():
-    print("Turn LEDs off")
-    
-def moveMouth():
-    print("Move mouth")
-    
-def shutMouth():
-    print("Stop move mouth")
+
+    def cleanup(self):
+        self.eyes.shut_down()
+        self.neck.shut_down()
+        self.mouth.shut_down()
 
 def main():
-    currentState = AlexaState.IDLE
-    for line in sys.stdin:
-        
-        newState = parseStatus(line)
-        
-        if newState is None or newState == currentState:
-            continue
-        
-        currentState = newState
-        
-        if currentState == AlexaState.LISTENING:
-            turnLedsOn()
-            raiseHead()
-            
-        if currentState == AlexaState.SPEAKING:
-            moveMouth()
-        
-        if currentState == AlexaState.IDLE:
-            shutMouth()
-            lowerHead()
-            turnLedsOff()
-
+    TonkyWonky().run()
 
 if __name__ == '__main__':
     main()
