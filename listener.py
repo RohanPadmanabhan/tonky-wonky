@@ -3,7 +3,7 @@ from enum import Enum
 
 
 class AlexaState(Enum):
-    CONNECTING = 'Connecting...'
+    #CONNECTING = 'Connecting...'
     IDLE = 'Alexa is currently idle!'
     LISTENING = 'Listening...'
     THINKING = 'Thinking...'
@@ -34,7 +34,7 @@ def shutMouth():
     print("Stop move mouth")
 
 def main():
-    currentState = AlexaState.CONNECTING
+    currentState = AlexaState.IDLE
     for line in sys.stdin:
         
         newState = parseStatus(line)
